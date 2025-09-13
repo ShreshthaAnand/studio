@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import ParentInsight from '@/components/parent-insight';
+import BehaviorAnalysis from '@/components/behavior-analysis';
 
 const NUM_UPLOAD_SLOTS = 12;
 
@@ -134,6 +135,8 @@ export default function Home() {
           </Card>
           
           <ParentInsight />
+
+          <BehaviorAnalysis />
         </div>
       </main>
       <footer className="text-center p-4 text-sm text-muted-foreground">

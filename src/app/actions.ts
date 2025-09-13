@@ -8,6 +8,10 @@ import {
   interpretAction,
   InterpretActionInput,
 } from '@/ai/flows/interpret-action-flow';
+import {
+    analyzeChildBehavior,
+    AnalyzeChildBehaviorInput,
+} from '@/ai/flows/analyze-child-behavior-flow';
 import type { ImagePlaceholder } from '@/lib/placeholder-images';
 
 async function imageUrlToDataUrl(imageUrl: string): Promise<string> {
@@ -64,3 +68,20 @@ export async function interpretActionAction(
     return { error: 'Failed to interpret action. Please try again.' };
   }
 }
+
+export async function analyzeBehaviorAction(
+    description: string
+  ): Promise<{ analysis: string } | { error: string }> {
+    if (!description) {
+      return { error: 'Please provide a description of the video.' };
+    }
+  
+    try {
+      const input: AnalyzeChildBehaviorInput = { description };
+      const result = await analyzeChildBehavior(input);
+      return { analysis: result.analysis };
+    } catch (error) {
+      console.error('An error occurred during behavior analysis:', error);
+      return { error: 'Failed to analyze behavior. Please try again.' };
+    }
+  }

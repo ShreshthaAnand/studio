@@ -3,3 +3,4 @@ config();
 
 import '@/ai/flows/generate-sentence-from-images.ts';
 import '@/ai/flows/interpret-action-flow.ts';
+import '@/ai/flows/analyze-child-behavior-flow.ts';
