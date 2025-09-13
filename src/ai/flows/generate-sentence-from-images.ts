@@ -46,11 +46,13 @@ const prompt = ai.definePrompt({
   name: 'generateSentenceFromImagesPrompt',
   input: {schema: GenerateSentenceFromImagesInputSchema},
   output: {schema: GenerateSentenceFromImagesOutputSchema},
-  prompt: `You are an AI that generates a sentence based on a series of images.
+  prompt: `You are an AI that helps a child communicate their needs. A child will select one or more images that represent something they want to do. 
+  
+Your task is to generate a sentence from the child's perspective, starting with "I want to...". The sentence should describe the action or object in the image(s).
 
-You will receive a list of image data URIs. Each image represents an object, action, or feeling.
-
-Your goal is to construct a grammatically correct and contextually appropriate sentence that incorporates the meaning of each image in the order they are presented.
+For example:
+- If the image shows a person sleeping, you should generate "I want to sleep."
+- If the images show a person eating and an apple, you should generate "I want to eat an apple."
 
 Images: 
 {{#each imageDataUris}}
