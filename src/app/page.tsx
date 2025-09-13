@@ -9,6 +9,7 @@ import { ImageUploader } from '@/components/image-uploader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
+import ParentInsight from '@/components/parent-insight';
 
 const NUM_UPLOAD_SLOTS = 12;
 
@@ -131,6 +132,8 @@ export default function Home() {
               </div>
             </CardContent>
           </Card>
+          
+          <ParentInsight />
         </div>
       </main>
       <footer className="text-center p-4 text-sm text-muted-foreground">

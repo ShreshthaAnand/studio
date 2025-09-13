@@ -4,6 +4,10 @@ import {
   generateSentenceFromImages,
   GenerateSentenceFromImagesInput,
 } from '@/ai/flows/generate-sentence-from-images';
+import {
+  interpretAction,
+  InterpretActionInput,
+} from '@/ai/flows/interpret-action-flow';
 import type { ImagePlaceholder } from '@/lib/placeholder-images';
 
 async function imageUrlToDataUrl(imageUrl: string): Promise<string> {
@@ -41,5 +45,22 @@ export async function generateSentenceAction(
   } catch (error) {
     console.error('An error occurred during sentence generation:', error);
     return { error: 'Failed to generate sentence. Please try again.' };
+  }
+}
+
+export async function interpretActionAction(
+  description: string
+): Promise<{ interpretation: string } | { error: string }> {
+  if (!description) {
+    return { error: 'Please provide a description of the child\'s actions.' };
+  }
+
+  try {
+    const input: InterpretActionInput = { description };
+    const result = await interpretAction(input);
+    return { interpretation: result.interpretation };
+  } catch (error) {
+    console.error('An error occurred during action interpretation:', error);
+    return { error: 'Failed to interpret action. Please try again.' };
   }
 }
