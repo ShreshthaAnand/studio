@@ -86,35 +86,35 @@ export default function SentenceControls({
 
 
   return (
-    <Card className="shadow-sm">
+    <Card className="shadow-lg">
       <CardContent className="p-4 flex flex-col md:flex-row items-center gap-4">
         <Button
           onClick={handleGenerateSentence}
           disabled={selectedImages.length === 0 || isLoading}
           size="lg"
-          className="w-full md:w-auto shrink-0"
+          className="w-full md:w-auto shrink-0 !text-lg !font-extrabold !px-8 !py-6 rounded-xl"
         >
           {isLoading ? (
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            <Loader2 className="mr-2 h-6 w-6 animate-spin" />
           ) : (
-            <Sparkles className="mr-2 h-5 w-5" />
+            <Sparkles className="mr-2 h-6 w-6" />
           )}
-          Generate
+          Generate!
         </Button>
 
-        <div className="flex-1 w-full p-4 min-h-[52px] bg-muted/70 rounded-lg flex items-center justify-center text-center">
+        <div className="flex-1 w-full p-4 min-h-[60px] bg-muted/70 rounded-xl flex items-center justify-center text-center border-2 border-dashed">
           {isLoading ? (
-            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-7 w-3/4" />
           ) : generatedSentence ? (
-            <p className="text-lg font-medium text-foreground">{generatedSentence}</p>
+            <p className="text-xl font-bold text-foreground">{generatedSentence}</p>
           ) : (
-            <p className="text-muted-foreground">Generated sentence will appear here</p>
+            <p className="text-muted-foreground font-medium">Your new sentence will appear here!</p>
           )}
         </div>
 
         <div className="flex gap-2 w-full md:w-auto shrink-0">
             <Select onValueChange={setLanguage} value={language} disabled={voices.length === 0}>
-                <SelectTrigger className="w-full md:w-[150px]" aria-label="Select Language">
+                <SelectTrigger className="w-full md:w-[150px] !h-12 rounded-xl" aria-label="Select Language">
                     <Languages className="mr-2 h-5 w-5" />
                     <SelectValue placeholder="Language" />
                 </SelectTrigger>
@@ -132,9 +132,9 @@ export default function SentenceControls({
               size="lg"
               variant="outline"
               aria-label="Read sentence aloud"
-              className="px-3"
+              className="px-3 !h-12 rounded-xl"
             >
-              <Volume2 className="h-5 w-5" />
+              <Volume2 className="h-6 w-6" />
             </Button>
         </div>
       </CardContent>

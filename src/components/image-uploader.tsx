@@ -58,9 +58,9 @@ export function ImageUploader({ onUpload }: ImageUploaderProps) {
       <Card
         onClick={handleCardClick}
         className={cn(
-          'cursor-pointer transition-all duration-200 overflow-hidden group',
-          'hover:shadow-lg hover:-translate-y-1 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2',
-          'flex flex-col items-center justify-center bg-accent/30 hover:bg-accent/50'
+          'cursor-pointer transition-all duration-300 overflow-hidden group',
+          'hover:shadow-xl hover:-translate-y-2 focus-within:ring-4 focus-within:ring-primary/50 focus-within:ring-offset-2',
+          'flex flex-col items-center justify-center bg-accent/50 hover:bg-accent/80 aspect-square border-2 border-dashed border-primary/40'
         )}
         tabIndex={0}
         onKeyDown={(e) => {
@@ -72,9 +72,9 @@ export function ImageUploader({ onUpload }: ImageUploaderProps) {
         role="button"
         aria-label="Upload an image"
       >
-        <CardContent className="p-2 flex flex-col items-center justify-center text-center gap-2">
-            <UploadCloud className="h-8 w-8 text-muted-foreground" />
-            <p className="font-medium text-sm text-muted-foreground">Upload Image</p>
+        <CardContent className="p-4 flex flex-col items-center justify-center text-center gap-3">
+            <UploadCloud className="h-12 w-12 text-primary" />
+            <p className="font-bold text-base text-primary/90">Upload Image</p>
         </CardContent>
       </Card>
     </>
