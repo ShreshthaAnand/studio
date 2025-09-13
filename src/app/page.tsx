@@ -44,7 +44,7 @@ export default function Home() {
 
           <SentenceControls
             selectedImages={selectedImages}
-            onGenerationComplete={handleClearSelection}
+            onGenerationComplete={() => {}}
           />
           
           <Card className="shadow-lg overflow-hidden">
@@ -55,7 +55,7 @@ export default function Home() {
              <CardContent className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {Array.from({ length: 8 }).map((_, index) => (
-                    <ImageUploader key={index} onUpload={handleSelectImage} />
+                    <ImageUploader key={index} onUpload={handleSelectImage} onDeselect={handleDeselectImage} />
                   ))}
               </div>
             </CardContent>
