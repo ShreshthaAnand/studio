@@ -7,6 +7,7 @@ import SelectedImagesBar from '@/components/selected-images-bar';
 import SentenceControls from '@/components/sentence-controls';
 import type { ImagePlaceholder } from '@/lib/placeholder-images';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { ImageUploader } from '@/components/image-uploader';
 
 export default function Home() {
   const [selectedImages, setSelectedImages] = useState<ImagePlaceholder[]>([]);
@@ -47,10 +48,13 @@ export default function Home() {
             onGenerationComplete={handleClearSelection}
           />
           
-          <ImageGrid
-            images={PlaceHolderImages}
-            onSelect={handleSelectImage}
-          />
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+            <ImageUploader onUpload={handleSelectImage} />
+            <ImageGrid
+              images={PlaceHolderImages}
+              onSelect={handleSelectImage}
+            />
+          </div>
         </div>
       </main>
       <footer className="text-center p-4 text-sm text-muted-foreground">
