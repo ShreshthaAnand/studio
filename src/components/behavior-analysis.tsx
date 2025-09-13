@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { FileVideo, Loader2, Microscope } from 'lucide-react';
+import { Loader2, Microscope } from 'lucide-react';
 import { analyzeBehaviorAction } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from './ui/skeleton';
@@ -14,7 +14,28 @@ export default function BehaviorAnalysis() {
   const [description, setDescription] = useState('');
   const [analysis, setAnalysis] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const { toast } = useToast();
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.type.startsWith('video/')) {
+        const url = URL.createObjectURL(file);
+        setVideoUrl(url);
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Invalid File Type',
+          description: 'Please select a video file.',
+        });
+        setVideoUrl(null);
+        event.target.value = '';
+      }
+    } else {
+        setVideoUrl(null);
+    }
+  };
 
   const handleAnalyzeAction = async () => {
     if (!description.trim()) {
@@ -54,8 +75,15 @@ export default function BehaviorAnalysis() {
       <CardContent className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
             <label htmlFor="video-upload" className="font-medium text-sm">Upload Video</label>
-            <Input id="video-upload" type="file" accept="video/*" />
+            <Input id="video-upload" type="file" accept="video/*" onChange={handleFileChange} />
         </div>
+        
+        {videoUrl && (
+            <div className="rounded-xl overflow-hidden border">
+                <video src={videoUrl} controls className="w-full aspect-video" />
+            </div>
+        )}
+
         <Textarea
           placeholder="e.g., 'In the video, the child is stacking blocks and then knocking them over repeatedly...'"
           value={description}
