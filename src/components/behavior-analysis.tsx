@@ -53,8 +53,8 @@ export default function BehaviorAnalysis() {
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-            <label htmlFor="video-upload" className="font-medium text-sm">Upload Video (Coming Soon)</label>
-            <Input id="video-upload" type="file" accept="video/*" disabled />
+            <label htmlFor="video-upload" className="font-medium text-sm">Upload Video</label>
+            <Input id="video-upload" type="file" accept="video/*" />
         </div>
         <Textarea
           placeholder="e.g., 'In the video, the child is stacking blocks and then knocking them over repeatedly...'"
