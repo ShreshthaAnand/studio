@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { UploadCloud, X } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,18 +10,26 @@ import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 
 interface ImageUploaderProps {
+  initialImage: ImagePlaceholder | null;
   onUpload: (image: ImagePlaceholder) => void;
-  onDeselect?: (image: ImagePlaceholder) => void;
+  onRemove: () => void;
+  onImageClick?: (image: ImagePlaceholder) => void;
 }
 
-export function ImageUploader({ onUpload, onDeselect }: ImageUploaderProps) {
+export function ImageUploader({ initialImage, onUpload, onRemove, onImageClick }: ImageUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploadedImage, setUploadedImage] = useState<ImagePlaceholder | null>(null);
   const { toast } = useToast();
 
+  useEffect(() => {
+    setUploadedImage(initialImage);
+  }, [initialImage]);
+
   const handleCardClick = () => {
     if (!uploadedImage) {
       inputRef.current?.click();
+    } else if (onImageClick) {
+      onImageClick(uploadedImage);
     }
   };
 
@@ -41,7 +49,7 @@ export function ImageUploader({ onUpload, onDeselect }: ImageUploaderProps) {
       reader.onload = (e) => {
         const dataUrl = e.target?.result as string;
         const newImage: ImagePlaceholder = {
-          id: `uploaded-${Date.now()}`,
+          id: `uploaded-${Date.now()}-${Math.random()}`,
           description: file.name.split('.')[0] || 'Uploaded Image',
           imageUrl: dataUrl,
           imageHint: 'custom image',
@@ -59,9 +67,7 @@ export function ImageUploader({ onUpload, onDeselect }: ImageUploaderProps) {
   
   const handleReset = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    if(uploadedImage && onDeselect) {
-        onDeselect(uploadedImage)
-    }
+    onRemove();
     setUploadedImage(null);
     if(inputRef.current) {
       inputRef.current.value = '';
@@ -80,20 +86,20 @@ export function ImageUploader({ onUpload, onDeselect }: ImageUploaderProps) {
       <Card
         onClick={handleCardClick}
         className={cn(
-          'transition-all duration-300 overflow-hidden group relative',
+          'transition-all duration-300 overflow-hidden group relative aspect-square',
           !uploadedImage && 'cursor-pointer hover:shadow-xl hover:-translate-y-1 focus-within:ring-4 focus-within:ring-primary/50 focus-within:ring-offset-2',
-          !uploadedImage && 'flex flex-col items-center justify-center bg-accent/50 hover:bg-accent/80 aspect-square border-2 border-dashed border-primary/40',
-          uploadedImage && 'shadow-md'
+          !uploadedImage && 'flex flex-col items-center justify-center bg-accent/50 hover:bg-accent/80 border-2 border-dashed border-primary/40',
+          uploadedImage && 'shadow-md cursor-pointer hover:ring-4 hover:ring-primary/50'
         )}
-        tabIndex={uploadedImage ? -1 : 0}
+        tabIndex={0}
         onKeyDown={(e) => {
-            if (!uploadedImage && (e.key === 'Enter' || e.key === ' ')) {
+            if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 handleCardClick();
             }
         }}
-        role={uploadedImage ? 'img' : 'button'}
-        aria-label={uploadedImage ? uploadedImage.description : "Upload an image"}
+        role="button"
+        aria-label={uploadedImage ? `Select ${uploadedImage.description}` : "Upload an image"}
       >
         {uploadedImage ? (
           <>
@@ -104,7 +110,7 @@ export function ImageUploader({ onUpload, onDeselect }: ImageUploaderProps) {
                 className="object-cover"
             />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                 <Button variant="destructive" size="icon" onClick={handleReset}>
+                 <Button variant="destructive" size="icon" onClick={handleReset} aria-label={`Remove ${uploadedImage.description}`}>
                     <X className="h-5 w-5"/>
                     <span className="sr-only">Remove Image</span>
                  </Button>
