@@ -1,13 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { Header } from '@/components/header';
 import SelectedImagesBar from '@/components/selected-images-bar';
 import SentenceControls from '@/components/sentence-controls';
 import type { ImagePlaceholder } from '@/lib/placeholder-images';
 import { ImageUploader } from '@/components/image-uploader';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function Home() {
   const [selectedImages, setSelectedImages] = useState<ImagePlaceholder[]>([]);
@@ -49,9 +48,15 @@ export default function Home() {
           />
           
           <Card className="shadow-lg overflow-hidden">
-             <CardContent className="p-6 md:p-12 flex items-center justify-center min-h-[450px]">
-              <div className="w-full max-w-[300px]">
-                  <ImageUploader onUpload={handleSelectImage} />
+             <CardHeader>
+                <CardTitle>Add Your Images</CardTitle>
+                <CardDescription>Click on a card below to upload an image from your device. It will be added to your story.</CardDescription>
+             </CardHeader>
+             <CardContent className="p-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {Array.from({ length: 8 }).map((_, index) => (
+                    <ImageUploader key={index} onUpload={handleSelectImage} />
+                  ))}
               </div>
             </CardContent>
           </Card>
