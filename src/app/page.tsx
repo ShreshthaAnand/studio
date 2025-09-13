@@ -1,15 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Header } from '@/components/header';
 import SelectedImagesBar from '@/components/selected-images-bar';
 import SentenceControls from '@/components/sentence-controls';
 import type { ImagePlaceholder } from '@/lib/placeholder-images';
-import { ImageUploader } from '@/components/image-uploader';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import Image from 'next/image';
+import { ImageUploader } from '@/components/image-uploader';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function Home() {
   const [selectedImages, setSelectedImages] = useState<ImagePlaceholder[]>([]);
@@ -44,33 +46,68 @@ export default function Home() {
             onDeselect={handleDeselectImage}
             onClear={handleClearSelection}
           />
-          
-          <SentenceControls 
+
+          <SentenceControls
             selectedImages={selectedImages}
             onGenerationComplete={handleClearSelection}
           />
           
-          <Card className="bg-white/80 shadow-lg border-2 border-primary/20">
-            <CardContent className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="md:col-span-1 flex items-center justify-center">
-                    <div className="w-full max-w-[200px]">
-                        <ImageUploader onUpload={handleSelectImage} />
-                    </div>
+          <Card className="shadow-lg overflow-hidden">
+             <Tabs defaultValue="default" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 h-14 p-1">
+                <TabsTrigger value="default" className="text-lg font-bold h-full">Default Images</TabsTrigger>
+                <TabsTrigger value="custom" className="text-lg font-bold h-full">Add Your Own</TabsTrigger>
+              </TabsList>
+              <TabsContent value="default">
+                <ScrollArea className="h-96 w-full">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4">
+                    {PlaceHolderImages.map((image) => (
+                      <Card
+                        key={image.id}
+                        onClick={() => handleSelectImage(image)}
+                        className={cn(
+                          'cursor-pointer transition-all duration-300 overflow-hidden group',
+                          'hover:shadow-xl hover:-translate-y-1 focus-within:ring-4 focus-within:ring-primary/50 focus-within:ring-offset-2 aspect-square'
+                        )}
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                handleSelectImage(image);
+                            }
+                        }}
+                        role="button"
+                        aria-label={`Select ${image.description}`}
+                      >
+                        <CardContent className="p-0 flex flex-col items-center justify-center text-center h-full relative">
+                          <Image
+                            src={image.imageUrl}
+                            alt={image.description}
+                            fill
+                            className="object-cover"
+                            data-ai-hint={image.imageHint}
+                          />
+                          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <p className="font-bold text-lg text-white z-10 absolute bottom-2 drop-shadow-md">{image.description}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+              <TabsContent value="custom">
+                <div className="p-6 md:p-12 flex items-center justify-center min-h-80">
+                  <div className="w-full max-w-[250px]">
+                      <ImageUploader onUpload={handleSelectImage} />
+                  </div>
                 </div>
-                <div className="md:col-span-2 text-center md:text-left flex flex-col justify-center">
-                    <h2 className="text-2xl font-bold text-primary-dark mb-2">Build a Sentence!</h2>
-                    <p className="text-muted-foreground">
-                        Upload your own pictures to create a story. Click on the cloud to add an image from your device.
-                    </p>
-                </div>
-              </div>
-            </CardContent>
+              </TabsContent>
+            </Tabs>
           </Card>
         </div>
       </main>
       <footer className="text-center p-4 text-sm text-muted-foreground">
-        <p>Built with Next.js and Firebase Genkit. Upload your own images to form a sentence.</p>
+        <p>Built with Next.js and Firebase Genkit. Select images to form a sentence.</p>
       </footer>
     </div>
   );
